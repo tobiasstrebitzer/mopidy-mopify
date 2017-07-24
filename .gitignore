@@ -19,3 +19,4 @@ nosetests.xml
 Mopidy_Mopify.egg-info/
 mopidy_mopify/sync.ini
 .cache
+electron/dist/*

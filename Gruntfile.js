@@ -13,7 +13,10 @@ module.exports = function ( grunt ) {
     grunt.loadNpmTasks('grunt-html2js');
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-electron-packager');
     grunt.loadNpmTasks('grunt-ngmin');
+
+    var os = require( 'os' )
 
      /**
       * Load in our build configuration file.
@@ -196,6 +199,16 @@ module.exports = function ( grunt ) {
                         cwd: '<%= build_dir %>',
                         expand: true
                     }
+                ]
+            },
+            electron: {
+                files: [
+                    {
+                        src: [ '**' ],
+                        cwd: 'dist/assets/',
+                        dest: 'electron/build/assets/',
+                        expand: true
+                    },
                 ]
             }
         },
@@ -430,6 +443,20 @@ module.exports = function ( grunt ) {
             }
         },
 
+        'electron-packager': {
+            build: {
+                options:{
+                    platform: os.platform(),
+                    arch: os.arch(),
+                    dir: './electron/build',
+                    out: './electron/dist',
+                    icon: './electron/resources/icon.icns',
+                    name: 'Mopify',
+                    asar: true,
+                    overwrite: true
+                }
+            }
+        }
     };
 
     grunt.initConfig( grunt.util._.extend( taskConfig, userConfig ) );
@@ -475,6 +502,11 @@ module.exports = function ( grunt ) {
      * The default tasks to run.
      */
     grunt.registerTask( 'default', [ 'build', 'compile' ] );
+
+    /**
+     * Package electron standalone app.
+     */
+    grunt.registerTask( 'electron', [ 'default', 'copy:electron', 'electron-packager:build' ] );
 
     /**
       * The index.html template includes the stylesheet and javascript sources
