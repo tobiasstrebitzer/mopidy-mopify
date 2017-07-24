@@ -58,11 +58,9 @@ angular.module('mopify.widgets.directive.track', [
              *
              * TODO: Search for a reason why this is happening
              */
-            scope.$watch(function(){
-                return scope.track.id;
-            }, function(current, previous){
-                if(current === undefined && previous != null)
-                    scope.track.id = previous;
+            scope.$watch("track", function(current, previous){
+                if(current == null && previous != null)
+                    scope.track = previous;
             });
 
             scope.artistsString = function(){
