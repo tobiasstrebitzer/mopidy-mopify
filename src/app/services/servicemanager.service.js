@@ -79,7 +79,9 @@ angular.module("mopify.services.servicemanager", [
         }
 
         // Send to GA
-        $window.ga('send', 'event', 'service', 'enabled', servicename);
+        if($window.ga) {
+            $window.ga('send', 'event', 'service', 'enabled', servicename);
+        }
     };
 
     ServiceManager.prototype.disableService = function(service) {
@@ -95,7 +97,9 @@ angular.module("mopify.services.servicemanager", [
         $rootScope.$broadcast("mopify:services:disabled", service);
 
         // Send to GA
-        $window.ga('send', 'event', 'service', 'disabled', servicename);
+        if($window.ga) {
+            $window.ga('send', 'event', 'service', 'disabled', servicename);
+        }
     };
 
     ServiceManager.prototype.isEnabled = function(service) {

@@ -101,14 +101,18 @@ angular.module('mopify', [
 
     $scope.$on('$viewContentLoaded', function(event) {
         // Send pageview
-        $window.ga('send', 'pageview', { page: $location.path() });
+        if($window.ga) {
+            $window.ga('send', 'pageview', { page: $location.path() });
+        }
     });
 
     // Set current app version
-    $window.ga('set', {
-        'appName': 'mopidy-mopify',
-        'appVersion': VersionManager.version
-    });
+    if($window.ga) {
+        $window.ga('set', {
+            'appName': 'mopidy-mopify',
+            'appVersion': VersionManager.version
+        });
+    }
 
     // Start the mopidy service
     mopidyservice.start();
