@@ -4,8 +4,8 @@ angular.module("mopify.services.autoupdate", [
     "mopify.services.settings"
 ])
 
-.factory("AutoUpdate", function($q, $http, $location, $rootScope, Settings){
-
+.factory("AutoUpdate", function($q, $http, $location, $rootScope, Settings, electronService){
+    var protocol = electronService.available ? "http" : $location.protocol();
     var canupdate = false;
 
     var mopidyip = Settings.get("mopidyip", $location.host());
@@ -23,7 +23,7 @@ angular.module("mopify.services.autoupdate", [
         var deferred = $q.defer();
 
         // Make request
-        $http.get($location.protocol() + "://" + mopidyip + ':' + mopidyport + '/mopify/update').success(function(data){
+        $http.get(protocol + "://" + mopidyip + ':' + mopidyport + '/mopify/update').success(function(data){
             canupdate = data.response;
             deferred.resolve(canupdate);
         }).error(function(data){
@@ -44,7 +44,7 @@ angular.module("mopify.services.autoupdate", [
         // Check if we can update
         if(canupdate){
             // Make request
-            $http.post($location.protocol() + "://" + mopidyip + ':' + mopidyport + '/mopify/update').success(function(data){
+            $http.post(protocol + "://" + mopidyip + ':' + mopidyport + '/mopify/update').success(function(data){
                 deferred.resolve(data);
 
                 // Broadcast update message

@@ -7,12 +7,12 @@ angular.module("mopify.services.sync", [
     'mopify.services.spotifylogin'
 ])
 
-.factory("Sync", function SyncFactory($http, $q, $location, localStorageService, Settings, ServiceManager, SpotifyLogin){
+.factory("Sync", function SyncFactory($http, $q, $location, localStorageService, Settings, ServiceManager, SpotifyLogin, electronService) {
 
     var mopidyip = Settings.get("mopidyip", $location.host());
     var mopidyport = Settings.get("mopidyport", $location.port());
-
-    var apiUrl = $location.protocol() + "://" + mopidyip + ":" +  mopidyport + "/mopify/sync/";
+    var protocol = electronService.available ? "http" : $location.protocol();
+    var apiUrl = protocol + "://" + mopidyip + ":" +  mopidyport + "/mopify/sync/";
 
     /**
      * Do a post request to the sync server

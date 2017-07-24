@@ -8,6 +8,7 @@ angular.module('mopify', [
     'mopify.services.versionmanager',
     'mopify.services.autoupdate',
     "mopify.services.settings",
+    "mopify.services.electron",
     'spotify',
     'mopify.dashboard',
     'mopify.search',
@@ -50,11 +51,15 @@ angular.module('mopify', [
     $httpProvider.interceptors.push('SpotifyAuthenticationIntercepter');
 })
 
-.controller("AppController", function AppController($scope, $rootScope, $http, $location, $window, mopidyservice, notifier, VersionManager, localStorageService, AutoUpdate, prompt, Settings){
+.controller("AppController", function AppController($scope, $rootScope, $http, $location, $window, mopidyservice, notifier, VersionManager, localStorageService, AutoUpdate, prompt, Settings, electronService){
     var connectionStates = {
         online: 'Online',
         offline: 'Offline'
     };
+    
+    if(electronService.available) {
+        electronService.createMenu();
+    }
 
     var defaultPageTitle = 'Mopify';
 

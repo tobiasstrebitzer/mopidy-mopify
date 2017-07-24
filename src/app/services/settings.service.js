@@ -4,7 +4,7 @@ angular.module("mopify.services.settings", [
     "LocalStorageModule"
 ])
 
-.factory("Settings", function(localStorageService){
+.factory("Settings", function(localStorageService, electronService) {
 
     var rootkey = "settings";
 
@@ -27,8 +27,14 @@ angular.module("mopify.services.settings", [
      * @param  {string} key
      * @param  {string} defaultvalue
      */
-    Settings.prototype.get = function(key, defaultvalue){
-        return (localStorageService.get(rootkey) != null && localStorageService.get(rootkey)[key] != null && localStorageService.get(rootkey)[key] !== "") ? localStorageService.get(rootkey)[key] : defaultvalue;
+    Settings.prototype.get = function(key, defaultvalue) {
+        if((localStorageService.get(rootkey) != null && localStorageService.get(rootkey)[key] != null && localStorageService.get(rootkey)[key] !== "")) {
+            return localStorageService.get(rootkey)[key];
+        }else if(electronService.available && electronService.settings && electronService.settings[key] != null) {
+            return electronService.settings[key];
+        }else{
+            return defaultvalue;
+        }
     };
 
     /**

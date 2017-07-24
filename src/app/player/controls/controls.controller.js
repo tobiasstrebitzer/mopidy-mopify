@@ -10,7 +10,7 @@ angular.module('mopify.player.controls', [
 /**
  * After defining the routes we create the controller for this module
  */
-.controller("PlayerControlsController", function PlayerControlsController($scope, $window, $rootScope, mopidyservice, stationservice, hotkeys, QueueManager){
+.controller("PlayerControlsController", function PlayerControlsController($scope, $window, $rootScope, mopidyservice, stationservice, hotkeys, QueueManager, electronService){
     $scope.volume = 0;
     $scope.isRandom = false;
     $scope.isPlaying = false;
@@ -187,6 +187,10 @@ angular.module('mopify.player.controls', [
     $scope.closeVolumeOverlay = function(){
         $scope.volumeopened = false;
     };
+    
+    if(electronService.available) {
+        electronService.registerControls($scope);
+    }
 
     /**
      * Bind the shortcuts
